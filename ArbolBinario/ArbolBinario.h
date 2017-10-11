@@ -6,7 +6,7 @@
 template<class T>
 class ArbolBinario {
 private:
-
+    T raiz;
 public:
     ArbolBinario();
 
@@ -38,7 +38,7 @@ public:
  */
 template<class T>
 ArbolBinario<T>::ArbolBinario() {
-
+    raiz = NULL;
 }
 
 
@@ -59,8 +59,12 @@ ArbolBinario<T>::~ArbolBinario() {
  */
 template<class T>
 T ArbolBinario<T>::search(T dato) {
-    T temp;
-    return temp;
+
+    if (raiz == NULL)
+        throw 3;
+    else
+        return raiz->search(dato);
+
 }
 
 
@@ -71,7 +75,11 @@ T ArbolBinario<T>::search(T dato) {
  */
 template<class T>
 void ArbolBinario<T>::put(T dato) {
-
+    if (raiz == NULL){
+        raiz = new NodoArbol(dato);
+    }else {
+        raiz->put(dato);
+    }
 }
 
 
@@ -81,7 +89,11 @@ void ArbolBinario<T>::put(T dato) {
  */
 template<class T>
 void ArbolBinario<T>::remove(T dato) {
-
+    if (raiz == NULL){
+        throw 6;
+    }else {
+        raiz->remover(dato);
+    }
 }
 
 
@@ -91,7 +103,7 @@ void ArbolBinario<T>::remove(T dato) {
  */
 template<class T>
 bool ArbolBinario<T>::esVacio() {
-    return false;
+    return raiz == NULL;
 }
 
 
