@@ -1,98 +1,181 @@
 #ifndef HASHENTRY_H
 #define HASHENTRY_H
 
+#include <string.h>
+using namespace std;
+
+
 template<class T>
 class NodoArbol {
 private:
 
-    NodoArbol * izq;
-    NodoArbol * der;
+    NodoArbol *izq, *der;
     T dato;
-
 public:
-    void put(T d);
-    void put(NodoArbol *nodo);
-    T search(T d);
-    void remover(T d);
 
-//    void print(bool esDerecho, string identacion) {
-//        if (der != NULL) {
-//            der->print(true, identacion + (esDerecho ? "     " : "|    "));
-//        }
-//        cout << identacion;
-//        if (esDerecho) {
-//            cout << " /";
-//        } else {
-//            cout << " \\";
-//        }
-//        cout << "-- ";
-//        cout << dato << endl;
-//        if (izq != NULL) {
-//            izq->print(false, identacion + (esDerecho ? "|    " : "     "));
-//        }
-//    }
+    NodoArbol(T dato);
+
+    T getDato() const;
+
+    void setDato(T dato);
+
+    void put(T d);
+
+    void put(NodoArbol *nodo);
+
+    T search(T d);
+
+    NodoArbol *remover(T param);
+
+    void preorder();
+
+    void inorder();
+
+    void postorder();
+
+    void print(bool esDerecho, string identacion);
 };
 
-template <class T>
-void NodoArbol::put(T d) {
 
-    if (dato == d)
+template<class T>
+NodoArbol<T>::NodoArbol(T dato) : dato(dato) {
+    izq = NULL;
+    der = NULL;
+}
+
+
+template<class T>
+void NodoArbol<T>::put(T d) {
+
+    if (d == dato)
         throw 1;
-
-    if (d < dato){ //izquierda
+    else if (d < dato) { // va a la izq
         if (izq == NULL)
-        izq = new NodoArbol(d);
+            izq = new NodoArbol<T>(d);
         else
             izq->put(d);
-
-    }else{ //derecha
-
+    } else { // va a la der
         if (der == NULL)
-            der = new NodoArbol(d);
+            der = new NodoArbol<T>(d);
         else
             der->put(d);
-
     }
 }
 
-template <class T>
-T NodoArbol::search(T d) {
+template<class T>
+void NodoArbol<T>::put(NodoArbol<T> *nodo) {
 
-    if (d == dato)
+    if (nodo->getDato() == dato)
+        throw 1;
+    else if (nodo->getDato() < dato) { // va a la izq
+        if (izq == NULL)
+            izq = nodo;
+        else
+            izq->put(nodo);
+    } else { // va a la der
+        if (der == NULL)
+            der = nodo;
+        else
+            der->put(nodo);
+    }
+}
+
+template<class T>
+T NodoArbol<T>::search(T d) {
+    if (d == dato) {
         return dato;
-
-    else if (d < dato){
-        if (izq == NULL )
+    } else if (d < dato) {
+        if (izq == NULL)
             throw 3;
         else
-            izq->search(d);
-
-    }else{
+            return izq->search(d);
+    } else {
         if (der == NULL)
             throw 3;
         else
-            der->search(d);
+            return der->search(d);
     }
+}
+
+template<class T>
+NodoArbol<T> *NodoArbol<T>::remover(T d) {
+    NodoArbol<T> *aux;
+    if (d == dato) {
+        if (der != NULL) {
+            der->put(izq);
+            return der;
+        }
+        return izq;
+    } else if (d < dato) {
+        if (izq == NULL)
+            throw 3;
+        else {
+            aux = izq;
+            izq = izq->remover(d);
+            if (izq != aux)
+                delete aux;
+        }
+    } else {
+        if (der == NULL)
+            throw 3;
+        else {
+            aux = der;
+            der = der->remover(d);
+            if (der != aux)
+                delete aux;
+        }
+    }
+    return this;
+}
+
+template<class T>
+T NodoArbol<T>::getDato() const {
+    return dato;
+}
+
+template<class T>
+void NodoArbol<T>::setDato(T dato) {
+    NodoArbol::dato = dato;
 }
 
 template <class T>
-void NodoArbol::remover(T d) {
-
-    if (d == dato)
-        return dato;
-
-    else if (d < dato){
-        if (izq == NULL )
-            throw 3;
-        else
-            izq->remover(d);
-
-    }else{
-        if (der == NULL)
-            throw 3;
-        else
-            der->remover(d);
+void NodoArbol<T>::print(bool esDerecho, string identacion) {
+    if (der != NULL) {
+        der->print(true, identacion + (esDerecho ? "     " : "|    "));
+    }
+    cout << identacion;
+    if (esDerecho) {
+        cout << " /";
+    } else {
+        cout << " \\";
+    }
+    cout << "-- ";
+    cout << dato << endl;
+    if (izq != NULL) {
+        izq->print(false, identacion + (esDerecho ? "|    " : "     "));
     }
 }
+
+template<class T>
+void NodoArbol<T>::preorder() {
+    cout << dato << ", ";
+    if (izq != NULL) izq->preorder();
+    if (der != NULL) der->preorder();
+}
+
+template<class T>
+void NodoArbol<T>::inorder() {
+    if (izq != NULL) izq->inorder();
+    cout << dato << ", ";
+    if (der != NULL) der->inorder();
+}
+
+template<class T>
+void NodoArbol<T>::postorder() {
+    if (izq != NULL) izq->postorder();
+    if (der != NULL) der->postorder();
+    cout << dato << ", ";
+}
+
 
 #endif //HASHENTRY_H

@@ -6,7 +6,7 @@
 template<class T>
 class ArbolBinario {
 private:
-    T raiz;
+    NodoArbol<T> *raiz;
 public:
     ArbolBinario();
 
@@ -60,11 +60,11 @@ ArbolBinario<T>::~ArbolBinario() {
 template<class T>
 T ArbolBinario<T>::search(T dato) {
 
-    if (raiz == NULL)
+    if (raiz == NULL) {
         throw 3;
-    else
+    } else {
         return raiz->search(dato);
-
+    }
 }
 
 
@@ -75,9 +75,9 @@ T ArbolBinario<T>::search(T dato) {
  */
 template<class T>
 void ArbolBinario<T>::put(T dato) {
-    if (raiz == NULL){
-        raiz = new NodoArbol(dato);
-    }else {
+    if (raiz == NULL) {
+        raiz = new NodoArbol<T>(dato);
+    } else {
         raiz->put(dato);
     }
 }
@@ -89,10 +89,15 @@ void ArbolBinario<T>::put(T dato) {
  */
 template<class T>
 void ArbolBinario<T>::remove(T dato) {
-    if (raiz == NULL){
+    NodoArbol<T> *aux;
+    if (raiz == NULL) {
         throw 6;
-    }else {
-        raiz->remover(dato);
+    } else {
+
+        aux = raiz;
+        raiz = raiz->remover(dato);
+        if (raiz != aux)
+            delete aux;
     }
 }
 
@@ -112,7 +117,9 @@ bool ArbolBinario<T>::esVacio() {
  */
 template<class T>
 void ArbolBinario<T>::preorder() {
-
+    if (raiz != NULL) {
+        raiz->preorder();
+    }
 }
 
 
@@ -121,7 +128,9 @@ void ArbolBinario<T>::preorder() {
  */
 template<class T>
 void ArbolBinario<T>::inorder() {
-
+    if (raiz != NULL) {
+        raiz->inorder();
+    }
 }
 
 
@@ -130,7 +139,9 @@ void ArbolBinario<T>::inorder() {
  */
 template<class T>
 void ArbolBinario<T>::postorder() {
-
+    if (raiz != NULL) {
+        raiz->postorder();
+    }
 }
 
 
@@ -140,7 +151,9 @@ void ArbolBinario<T>::postorder() {
 template<class T>
 void ArbolBinario<T>::print() {
 
+    if (raiz != NULL) {
+        raiz->print(false, "");
+    }
 }
-
 
 #endif //HASHMAP_H
