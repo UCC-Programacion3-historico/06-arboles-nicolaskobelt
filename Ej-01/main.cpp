@@ -18,8 +18,13 @@ int main() {
         arr[i]=100+rand()%(501 - 100);
 
         cout<<arr[i]<<" / ";
+        try {
 
-        AB.put(arr[i]);
+            AB.put(arr[i]);
+        }catch (int e){
+cout << arr[i] << " ya existe\n";
+        }
+
     }
 
     AB.print();

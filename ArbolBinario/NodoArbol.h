@@ -1,9 +1,7 @@
 #ifndef HASHENTRY_H
 #define HASHENTRY_H
 
-#include <string.h>
 using namespace std;
-
 
 template<class T>
 class NodoArbol {
@@ -33,7 +31,22 @@ public:
 
     void postorder();
 
-    void print(bool esDerecho, string identacion);
+    void print(bool esDerecho, string identacion) {
+        if (der != NULL) {
+            der->print(true, identacion + (esDerecho ? "     " : "|    "));
+        }
+        cout << identacion;
+        if (esDerecho) {
+            cout << " /";
+        } else {
+            cout << " \\";
+        }
+        cout << "-- ";
+        cout << dato << endl;
+        if (izq != NULL) {
+            izq->print(false, identacion + (esDerecho ? "|    " : "     "));
+        }
+    }
 };
 
 
@@ -138,24 +151,6 @@ void NodoArbol<T>::setDato(T dato) {
     NodoArbol::dato = dato;
 }
 
-template <class T>
-void NodoArbol<T>::print(bool esDerecho, string identacion) {
-    if (der != NULL) {
-        der->print(true, identacion + (esDerecho ? "     " : "|    "));
-    }
-    cout << identacion;
-    if (esDerecho) {
-        cout << " /";
-    } else {
-        cout << " \\";
-    }
-    cout << "-- ";
-    cout << dato << endl;
-    if (izq != NULL) {
-        izq->print(false, identacion + (esDerecho ? "|    " : "     "));
-    }
-}
-
 template<class T>
 void NodoArbol<T>::preorder() {
     cout << dato << ", ";
@@ -176,6 +171,7 @@ void NodoArbol<T>::postorder() {
     if (der != NULL) der->postorder();
     cout << dato << ", ";
 }
+
 
 
 #endif //HASHENTRY_H
